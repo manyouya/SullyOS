@@ -305,15 +305,9 @@ Phase 2 Round 2 起 push 路径跟本地 fetch 路径**功能对齐**，不再�
 **主动消息 2.0**  
 对接了 TO 佬的 [ReiStandard](https://github.com/Tosd0/ReiStandard/) 协议，让角色能主动发消息烦你。
 
-**Instant 消息**  
-Instant Push（发完消息就能锁屏走人、角色回复好了自己以推送的形式回到你手机上）同样出自 **TO 佬**之手。而且 TO 现在还在持续帮忙做**社区维护**、跟进修一些**小 Bug**——热心又靠谱，项目能稳稳往前走，多亏有他。再次感谢 TO 佬。
-
 **小红书 Skill**  
 对接了 [xiaohongshu-skills](https://github.com/autoclaw-cc/xiaohongshu-skills)，让角色能真·发小红书。  
 本地部署教程看这里：[真实小红书本地部署指南](https://www.kdocs.cn/l/chctbSTPfm4L)
-
-**小红书 Lite**  
-对接了 [Spider_XHS](https://github.com/cv-cat/Spider_XHS)（by cv-cat），小红书 Lite 模式靠它实现，让角色不用折腾复杂的本地部署也能刷小红书。
 
 **音乐**  
 对接了 [NeteaseCloudMusicApi Enhanced](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)，让你能在系统里搜歌、听歌、看歌词。自备网易云会员 Cookie 即可解锁 VIP 音质。原项目 [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) 被迫归档后，Enhanced 版本一直在跟进网易云的协议变化，感谢维护者们的坚持。
