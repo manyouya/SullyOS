@@ -1,0 +1,75 @@
+name: Build APK
+
+on:
+  # 手动触发（点一下按钮就打包）
+  workflow_dispatch:
+  # 自动检测上游更新（每天检查一次作者仓库）
+  schedule:
+    - cron: '0 */6 * * *'  # 每6小时检查一次
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. 同步上游最新代码（重要！）
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      
+      # 2. 同步作者的最新更新
+      - name: Sync with upstream
+        run: |
+          git remote add upstream https://github.com/qegj567-cloud/SullyOS.git
+          git fetch upstream
+          git checkout main
+          git merge upstream/main --allow-unrelated-histories -X theirs || true
+      
+      # 3. 设置 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      # 4. 安装 pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      # 5. 安装依赖
+      - name: Install dependencies
+        run: pnpm install
+      
+      # 6. 创建环境变量文件（从 Secrets 读取）
+      - name: Create env file
+        run: |
+          echo "VITE_OPENAI_BASE_URL=${{ secrets.VITE_OPENAI_BASE_URL }}" >> .env.local
+          echo "VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}" >> .env.local
+          echo "VITE_OPENAI_MODEL=${{ secrets.VITE_OPENAI_MODEL }}" >> .env.local
+      
+      # 7. 构建项目
+      - name: Build project
+        run: npm run build
+      
+      # 8. 同步 Capacitor
+      - name: Capacitor sync
+        run: npm run cap:sync
+      
+      # 9. 添加安卓平台
+      - name: Add Android platform
+        run: npx cap add android
+      
+      # 10. 打包 APK（使用 debug 签名）
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      
+      # 11. 上传 APK 作为 Actions Artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SullyOS-App
+          path: android/app/build/outputs/apk/debug/app-debug.apk
